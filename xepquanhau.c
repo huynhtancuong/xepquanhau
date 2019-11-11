@@ -7,6 +7,7 @@
 int map[MAXM][MAXN];
 
 FILE *fout;
+int count = 0;
 
 
 void init_map() { // khởi tạo tất cả giá trị của map bằng 0
@@ -73,18 +74,17 @@ int la_quan_Hau(int m, int n) {
 }
 
 void quay_lui(int k) {
-    for(int m = 0; m < MAXM; m++) {
-        for(int n = 0; n < MAXN; n++) {
-            if (!la_quan_Hau(m, n) && !check_duong_di_quan_hau(m, n)) {
-                map[m][n] = 1;
-                if (k == SOQUANHAU) {
-                    print_map();
-                }
-                else {
-                    quay_lui(k+1);
-                }
-                map[m][n] = 0;
+    for(int n = 0; n < MAXN; n++) {
+        if (!la_quan_Hau(k, n) && !check_duong_di_quan_hau(k, n)) {
+            map[k][n] = 1;
+            if (k == SOQUANHAU - 1) {
+                count++;
+                print_map();
             }
+            else {
+                quay_lui(k+1);
+            }
+            map[k][n] = 0;
         }
     }
 }
@@ -92,7 +92,8 @@ void quay_lui(int k) {
 int main() {
     fout = fopen("output.txt", "w");
     init_map();
-    quay_lui(1);
+    quay_lui(0);
+    fprintf(fout, "counter = %d\n", count);
     fclose(fout);
     return 0;
 }
